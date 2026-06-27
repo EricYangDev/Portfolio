@@ -10,4 +10,4 @@ Sections:
 
 To run locally, open `index.html` in a browser.
 
-Or use this link: https://insect0114.github.io/ericyang.github.io/
+Or use this link: https://ericyangdev.github.io/Portfolio//

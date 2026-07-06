@@ -1,157 +1,539 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="auto">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eric Yang | Portfolio</title>
+  <title>Eric Yang | Educational Technology Developer</title>
+  <meta name="description" content="Eric Yang builds interactive EdTech tools, serious games, AI-assisted prototypes, QA systems, and learner-centered digital experiences." />
+  <meta name="author" content="Eric Yang" />
+  <meta property="og:title" content="Eric Yang | Interactive EdTech & Serious Games" />
+  <meta property="og:description" content="Playable portfolio demos for learning tools, serious games, QA systems, and AI-assisted educational workflows." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b1220" />
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
   <header class="site-header">
-    <div class="container header-inner">
-      <div class="logo">
-        <span class="logo-name">Eric Yang</span>
-        <span class="logo-tagline">Technology · Media · Research</span>
-      </div>
+    <nav class="nav-shell" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="Eric Yang home">
+        <span class="brand-mark" aria-hidden="true">EY</span>
+        <span>
+          <strong>Eric Yang</strong>
+          <small>Interactive EdTech Developer</small>
+        </span>
+      </a>
 
-      <nav class="nav">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
-      </nav>
-
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-        ◑
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+        <span>Menu</span>
       </button>
-    </div>
+
+      <div class="nav-links" id="nav-menu">
+        <a href="#demo-lab">Demo Lab</a>
+        <a href="#case-studies">Case Studies</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" type="button" aria-label="Switch color theme">◐</button>
+      </div>
+    </nav>
   </header>
 
-  <main>
-    <!-- Hero / Intro -->
-    <section class="hero">
-      <div class="container hero-inner">
-        <div>
-          <p class="hero-kicker">Portfolio</p>
-          <h1>Hello, I’m Eric.</h1>
-          <p class="hero-text">
-            Interdisciplinary technology + media student researching user psychology,
-            communications, and design. I use my understanding of human behavior and computers
-            to solve design problems.
-          </p>
-          <a href="#projects" class="btn-primary">View Projects</a>
+  <main id="main">
+    <section class="hero section-grid" id="home" aria-labelledby="hero-title">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Interactive EdTech • Serious Games • AI Prototyping</p>
+        <h1 id="hero-title">I build playable learning tools that make complex ideas easier to practice.</h1>
+        <p class="hero-text">
+          I combine JavaScript, UX design, game systems, psychology, and health education to create interactive learning experiences that are engaging, measurable, and easy to update.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#demo-lab">Try the Demo Lab</a>
+          <a class="button ghost" href="mailto:ericyang.yang@mail.utoronto.ca">Contact Me</a>
+        </div>
+        <div class="proof-grid" aria-label="Resume highlights">
+          <div class="proof-card">
+            <span class="proof-number">5+</span>
+            <span>EdTech tools built</span>
+          </div>
+          <div class="proof-card">
+            <span class="proof-number">12+</span>
+            <span>QA defects reported</span>
+          </div>
+          <div class="proof-card">
+            <span class="proof-number">2+ yrs</span>
+            <span>UI/UX & game design</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel reveal" aria-label="Portfolio system preview">
+        <div class="panel-topline">
+          <span class="status-dot"></span>
+          <span>Live Portfolio System</span>
+        </div>
+        <h2>Demo Lab Progress</h2>
+        <p>Try the demos below to unlock local badges and view your learning analytics.</p>
+        <div class="mini-dashboard">
+          <div>
+            <strong data-stat="completed">0</strong>
+            <span>Demos completed</span>
+          </div>
+          <div>
+            <strong data-stat="badges">0</strong>
+            <span>Badges earned</span>
+          </div>
+        </div>
+        <div class="badge-strip" id="hero-badges" aria-live="polite"></div>
+      </aside>
+    </section>
+
+    <section class="section" id="demo-lab" aria-labelledby="demo-lab-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Demo Lab</p>
+        <h2 id="demo-lab-title">Interactive demos aligned with my resume</h2>
+        <p>
+          These demos replace static project cards with small, playable systems that show EdTech development, serious games, QA testing, level design, AI-assisted workflows, and product design.
+        </p>
+      </div>
+
+      <div class="mode-toolbar reveal" aria-label="Portfolio viewing mode">
+        <span>View as:</span>
+        <button class="mode-button active" type="button" data-mode="recruiter">Recruiter</button>
+        <button class="mode-button" type="button" data-mode="designer">Designer</button>
+        <button class="mode-button" type="button" data-mode="developer">Developer</button>
+      </div>
+
+      <div class="demo-card-grid">
+        <article class="demo-card reveal">
+          <div class="card-icon">💬</div>
+          <p class="card-kicker">Health education</p>
+          <h3>Care Conversation Simulator</h3>
+          <p>Practice learner-centered responses in a fictional palliative-care education scenario.</p>
+          <ul class="compact-list">
+            <li>Branching dialogue</li>
+            <li>Empathy, clarity, and safety feedback</li>
+            <li>Reflection summary</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#care-demo">Launch Simulator →</button>
+        </article>
+
+        <article class="demo-card reveal">
+          <div class="card-icon">🧩</div>
+          <p class="card-kicker">AI workflow prototype</p>
+          <h3>Scenario-to-Quiz Builder</h3>
+          <p>Paste lesson content and convert it into editable quiz and reflection prompts.</p>
+          <ul class="compact-list">
+            <li>Regex-style content parsing</li>
+            <li>Client-side generation</li>
+            <li>Copy-ready output</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#quiz-demo">Try the Tool →</button>
+        </article>
+
+        <article class="demo-card reveal">
+          <div class="card-icon">🗺️</div>
+          <p class="card-kicker">Serious games</p>
+          <h3>Outdoor Quest Generator</h3>
+          <p>Generate a movement-based micro quest using time, energy, and motivation design.</p>
+          <ul class="compact-list">
+            <li>Gamified movement</li>
+            <li>Reflection prompts</li>
+            <li>Motivation lens</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#quest-demo">Generate a Quest →</button>
+        </article>
+
+        <article class="demo-card reveal">
+          <div class="card-icon">🐞</div>
+          <p class="card-kicker">Game engine QA</p>
+          <h3>QA Bug Triage Arena</h3>
+          <p>Find seeded usability bugs, write a defect report, and receive a quality score.</p>
+          <ul class="compact-list">
+            <li>Severity scoring</li>
+            <li>Reproduction steps</li>
+            <li>Expected vs. actual results</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#qa-demo">File a Bug Report →</button>
+        </article>
+
+        <article class="demo-card reveal">
+          <div class="card-icon">🎮</div>
+          <p class="card-kicker">Level design</p>
+          <h3>Level Flow Designer</h3>
+          <p>Build a tiny level grid and analyze pacing, readability, and difficulty spikes.</p>
+          <ul class="compact-list">
+            <li>Grid editing</li>
+            <li>Path analysis</li>
+            <li>Design notes</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#level-demo">Analyze a Level →</button>
+        </article>
+
+        <article class="demo-card reveal">
+          <div class="card-icon">🛠️</div>
+          <p class="card-kicker">Product design</p>
+          <h3>Vector Product Configurator</h3>
+          <p>Customize a small SVG charm and generate production notes for fabrication.</p>
+          <ul class="compact-list">
+            <li>SVG preview</li>
+            <li>Layer notes</li>
+            <li>Vendor-style specs</li>
+          </ul>
+          <button class="text-button" type="button" data-launch="#vector-demo">Configure Product →</button>
+        </article>
+      </div>
+
+      <article class="lab-demo reveal" id="care-demo" data-demo="care">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Flagship Demo</p>
+            <h3>Care Conversation Simulator</h3>
+          </div>
+          <span class="demo-time">2 min interaction</span>
+        </div>
+        <div class="demo-shell two-column">
+          <div class="scenario-card">
+            <p class="scenario-label" id="care-stage">Scenario 1 of 3</p>
+            <h4 id="care-title">Family learning conversation</h4>
+            <p id="care-text">
+              A family caregiver says they feel overwhelmed after a short teaching session. Choose the best educational response.
+            </p>
+            <div class="option-stack" id="care-options" aria-live="polite"></div>
+          </div>
+          <div class="feedback-panel">
+            <h4 id="care-feedback-title">Feedback will appear here</h4>
+            <p id="care-feedback">Choose a response to see how the simulator evaluates empathy, clarity, and psychological safety.</p>
+            <div class="meter-group" aria-label="Care response score meters">
+              <label>Empathy <span id="care-empathy-value">0</span>%</label>
+              <div class="meter"><span id="care-empathy-meter"></span></div>
+              <label>Clarity <span id="care-clarity-value">0</span>%</label>
+              <div class="meter"><span id="care-clarity-meter"></span></div>
+              <label>Safety <span id="care-safety-value">0</span>%</label>
+              <div class="meter"><span id="care-safety-meter"></span></div>
+            </div>
+            <button class="button ghost small" type="button" id="care-reset">Restart Scenario</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="quiz-demo" data-demo="quiz">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Content Workflow Demo</p>
+            <h3>Scenario-to-Quiz Builder</h3>
+          </div>
+          <span class="demo-time">Editable output</span>
+        </div>
+        <div class="demo-shell two-column">
+          <div>
+            <label class="field-label" for="quiz-input">Paste short lesson content</label>
+            <textarea id="quiz-input" rows="10">Learner-centered educational tools should help people practice decisions, receive useful feedback, and reflect on their next step. In health education, clear communication and psychological safety matter because learners may feel uncertain or overwhelmed. Interactive scenarios can support engagement by turning abstract concepts into concrete choices.</textarea>
+            <div class="button-row">
+              <button class="button primary" type="button" id="generate-quiz">Generate Learning Activity</button>
+              <button class="button ghost" type="button" id="copy-quiz">Copy Output</button>
+            </div>
+          </div>
+          <div class="output-panel">
+            <h4>Generated activity</h4>
+            <div id="quiz-output" aria-live="polite">
+              <p class="muted">Your questions, answers, and reflection prompts will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="quest-demo" data-demo="quest">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Serious Games Demo</p>
+            <h3>Outdoor Quest Generator</h3>
+          </div>
+          <span class="demo-time">Movement-first design</span>
+        </div>
+        <div class="demo-shell two-column">
+          <form class="control-panel" id="quest-form">
+            <label class="field-label" for="quest-goal">Goal</label>
+            <select id="quest-goal">
+              <option value="light">Light walk</option>
+              <option value="explore">Explore somewhere nearby</option>
+              <option value="reflect">Reflect and decompress</option>
+              <option value="challenge">Challenge mode</option>
+            </select>
+
+            <label class="field-label" for="quest-time">Time available</label>
+            <select id="quest-time">
+              <option value="5">5 minutes</option>
+              <option value="15" selected>15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+            </select>
+
+            <label class="field-label" for="quest-motivation">Motivation lens</label>
+            <select id="quest-motivation">
+              <option value="intrinsic">Intrinsic curiosity</option>
+              <option value="narrative">Narrative quest</option>
+              <option value="social">Social accountability</option>
+              <option value="reward">Reward badge</option>
+            </select>
+
+            <button class="button primary" type="submit">Generate Quest</button>
+          </form>
+          <div class="output-panel quest-output" id="quest-output" aria-live="polite">
+            <p class="muted">Choose your settings to generate a small, safe, real-world quest. No location tracking required.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="qa-demo" data-demo="qa">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">QA Systems Demo</p>
+            <h3>QA Bug Triage Arena</h3>
+          </div>
+          <span class="demo-time">Find → report → score</span>
+        </div>
+        <div class="demo-shell two-column">
+          <div class="bug-arena" aria-label="Buggy interface test area">
+            <div class="fake-toolbar">
+              <span>Build 0.9.4</span>
+              <button type="button" data-bug="save">Save Loadout</button>
+            </div>
+            <div class="fake-game-card">
+              <h4>Economy Tuning Panel</h4>
+              <p>Balance coins, XP, and shop prices before release.</p>
+              <div class="fake-slider-row">
+                <label>Coin multiplier</label>
+                <input type="range" min="1" max="10" value="9" data-bug="slider" aria-label="Coin multiplier" />
+              </div>
+              <button type="button" class="danger-button" data-bug="contrast">Apply Discount</button>
+              <button type="button" class="button ghost small" data-bug="state">Preview Economy</button>
+            </div>
+            <div class="found-bugs">
+              <h4>Found bugs</h4>
+              <ul id="found-bugs-list"></ul>
+            </div>
+          </div>
+
+          <form class="bug-report" id="bug-report-form">
+            <label class="field-label" for="bug-severity">Severity</label>
+            <select id="bug-severity">
+              <option value="minor">Minor</option>
+              <option value="major" selected>Major</option>
+              <option value="critical">Critical</option>
+            </select>
+
+            <label class="field-label" for="bug-steps">Reproduction steps</label>
+            <textarea id="bug-steps" rows="4" placeholder="1. Open Economy Tuning Panel&#10;2. Click Preview Economy&#10;3. Observe..."></textarea>
+
+            <label class="field-label" for="bug-expected">Expected result</label>
+            <input id="bug-expected" type="text" placeholder="The preview updates and confirms the saved state." />
+
+            <label class="field-label" for="bug-actual">Actual result</label>
+            <input id="bug-actual" type="text" placeholder="The UI reports success but no state changes." />
+
+            <button class="button primary" type="submit">Score Bug Report</button>
+            <div class="output-panel" id="bug-score" aria-live="polite">
+              <p class="muted">Find bugs in the test area, then write a report.</p>
+            </div>
+          </form>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="level-demo" data-demo="level">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Game Design Demo</p>
+            <h3>Level Flow Designer</h3>
+          </div>
+          <span class="demo-time">Click tiles to edit</span>
+        </div>
+        <div class="demo-shell two-column">
+          <div>
+            <div class="legend" aria-label="Tile legend">
+              <span><b class="tile-dot start"></b>Start</span>
+              <span><b class="tile-dot path"></b>Path</span>
+              <span><b class="tile-dot reward"></b>Reward</span>
+              <span><b class="tile-dot hazard"></b>Hazard</span>
+              <span><b class="tile-dot goal"></b>Goal</span>
+            </div>
+            <div class="level-grid" id="level-grid" aria-label="Clickable level design grid"></div>
+            <div class="button-row">
+              <button class="button primary" type="button" id="analyze-level">Analyze Flow</button>
+              <button class="button ghost" type="button" id="reset-level">Reset Grid</button>
+            </div>
+          </div>
+          <div class="output-panel" id="level-output" aria-live="polite">
+            <h4>Design notes</h4>
+            <p class="muted">Create a path from start to goal, add rewards and hazards, then analyze the player flow.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="vector-demo" data-demo="vector">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Fabrication Workflow Demo</p>
+            <h3>Vector Product Configurator</h3>
+          </div>
+          <span class="demo-time">SVG + specs</span>
+        </div>
+        <div class="demo-shell two-column">
+          <form class="control-panel" id="vector-form">
+            <label class="field-label" for="product-shape">Charm shape</label>
+            <select id="product-shape">
+              <option value="shield">Shield badge</option>
+              <option value="star">Star token</option>
+              <option value="gem">Gem charm</option>
+            </select>
+
+            <label class="field-label" for="product-layer">Layer color</label>
+            <select id="product-layer">
+              <option value="blue">Blue acrylic</option>
+              <option value="teal">Teal acrylic</option>
+              <option value="amber">Amber acrylic</option>
+            </select>
+
+            <label class="field-label" for="product-finish">Engraving style</label>
+            <select id="product-finish">
+              <option value="clean">Clean line art</option>
+              <option value="dense">Dense detail</option>
+              <option value="minimal">Minimal icon</option>
+            </select>
+
+            <label class="field-label" for="product-hardware">Hardware</label>
+            <select id="product-hardware">
+              <option value="keychain">Keychain ring</option>
+              <option value="pin">Pin backing</option>
+              <option value="magnet">Magnet backing</option>
+            </select>
+
+            <button class="button primary" type="submit">Generate Spec</button>
+          </form>
+          <div class="product-preview-card">
+            <div class="vector-preview" id="vector-preview" aria-live="polite"></div>
+            <div class="output-panel" id="vector-notes">
+              <p class="muted">Customize the product to generate a fabrication-style note.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="lab-demo reveal" id="analytics-demo" data-demo="analytics">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Learning Analytics</p>
+            <h3>Local Progress Dashboard</h3>
+          </div>
+          <span class="demo-time">Browser-only data</span>
+        </div>
+        <div class="analytics-grid" id="analytics-grid" aria-live="polite"></div>
+        <button class="button ghost small" type="button" id="reset-analytics">Reset Local Progress</button>
+      </article>
+    </section>
+
+    <section class="section" id="case-studies" aria-labelledby="case-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Deep Dives</p>
+        <h2 id="case-title">Case-study pages</h2>
+        <p>Each page turns an old static project into a focused interactive portfolio piece.</p>
+      </div>
+      <div class="case-grid">
+        <a class="case-card reveal" href="project-mixed-methods.html">
+          <span>01</span>
+          <h3>Care Simulator + Quiz Builder</h3>
+          <p>EdTech, health education, branching dialogue, and content-generation workflows.</p>
+        </a>
+        <a class="case-card reveal" href="project-geolocation.html">
+          <span>02</span>
+          <h3>Outdoor Quest Generator</h3>
+          <p>Serious games, gamification, movement motivation, and reflective play.</p>
+        </a>
+        <a class="case-card reveal" href="project-graphic-design.html">
+          <span>03</span>
+          <h3>QA + Product Design Lab</h3>
+          <p>Bug reporting, level-flow analysis, SVG product configuration, and design specs.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section split-section" id="process" aria-labelledby="process-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">How I Work</p>
+        <h2 id="process-title">From learning problem to tested interaction</h2>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <span>1</span>
+          <h3>Define the learner problem</h3>
+          <p>Clarify the behavior, skill, or decision the learner needs to practice.</p>
+        </div>
+        <div class="timeline-item">
+          <span>2</span>
+          <h3>Prototype the interaction</h3>
+          <p>Build lightweight HTML, CSS, JavaScript, and JSON systems that are easy to revise.</p>
+        </div>
+        <div class="timeline-item">
+          <span>3</span>
+          <h3>Test, measure, and iterate</h3>
+          <p>Use QA reports, usability feedback, and learner analytics to improve the experience.</p>
         </div>
       </div>
     </section>
 
-    <!-- About -->
-    <section id="about" class="section">
-      <div class="container">
-        <h2>About Me</h2>
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Skills</p>
+        <h2 id="skills-title">Focused skill areas</h2>
+      </div>
+      <div class="skill-grid">
+        <article class="skill-card reveal">
+          <h3>Learning & UX</h3>
+          <p>Learning experience design, health education, learner engagement, usability testing, user-centered design.</p>
+        </article>
+        <article class="skill-card reveal">
+          <h3>Development</h3>
+          <p>JavaScript, Python, HTML, CSS, regex workflows, JSON content systems, data collection, analysis.</p>
+        </article>
+        <article class="skill-card reveal">
+          <h3>Games & Simulation</h3>
+          <p>Serious games, gamification, branching scenarios, level design, game engine QA, interaction flows.</p>
+        </article>
+        <article class="skill-card reveal">
+          <h3>AI & Workflow</h3>
+          <p>AI-assisted prototyping, prompt engineering, content generation, workflow acceleration, iterative testing.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about" aria-labelledby="about-title">
+      <div class="about-card reveal">
+        <p class="eyebrow">About</p>
+        <h2 id="about-title">Educational Technology Developer focused on serious games and interactive learning.</h2>
         <p>
-          I focus on designing and analyzing interactive systems that bridge technology,
-          behavior, and media. My work spans user research, game-based learning, and digital
-          experience design, with an emphasis on how people engage with interactive environments.
-        </p>
-        <p>
-          I enjoy building small prototypes, exploring new interfaces, and using empirical
-          methods to understand how technology shapes human behavior.
-        </p>
-        <p>
-          I’m currently looking for opportunities in research, human-computer interaction, 
-          UX, and technology or media-focused projects.
+          I design and build learner-centered digital experiences that combine technology, psychology, UI/UX, and game design. My work is strongest when I can turn a learning goal into something people can try, test, improve, and remember.
         </p>
       </div>
     </section>
 
-    <!-- Projects -->
-    <section id="projects" class="section">
-      <div class="container">
-        <h2>Projects</h2>
-        <div class="grid">
-          <article class="card">
-            <img class="card-icon" src="images/geo.png" alt="Geolocation RPG icon">
-            <h3>Geolocation RPG</h3>
-            <p>
-              A location-tracking game inspired by Dungeons and Dragons, focusing
-              on promoting physical, mental, and spiritual well-being.
-            </p>
-            <p class="meta">Role: Research · Prototyping · Documentation</p>
-            <!-- <a href="https://github.com/your-username/your-repo" target="_blank" rel="noreferrer">View on GitHub</a> -->
-            <a class="btn-secondary" href="project-geolocation.html">Read More</a>
-            
-          </article>
-
-          <article class="card">
-            <img class="card-icon" src="images/mixed.png" alt="Mixed Methods Research icon">
-            <h3>Mixed Method Research</h3>
-            <p>
-              Analyzing historical data of adult content in video games and
-              exploring the implications of the reward-punishment loop. 
-            </p>
-            <p class="meta">Role: Mixed Methods · Data Visualization</p>
-            <a class="btn-secondary" href="project-mixed-methods.html">Read More</a>
-          </article>
-
-          <article class="card">
-            <img class="card-icon" src="images/manage.png" alt="Graphic Design & Management icon">
-            <h3>Graphic Design and Management</h3>
-            <p>
-              Leveraging vector file creation, CNC machining, and blueprinting
-              to build and manage a merchandise business from the ground up.
-            </p>
-            <p class="meta">Role: Management · Graphic Design</p>
-            <a class="btn-secondary" href="project-graphic-design.html">Read More</a>
-          </article>
-        </div>
+    <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-title">Let’s build something interactive.</h2>
+        <p>Open to EdTech, serious games, UX, QA, and interactive learning opportunities.</p>
       </div>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills" class="section">
-      <div class="container">
-        <h2>Skills</h2>
-        <ul class="pill-list">
-          <li>Data collection &amp; analysis</li>
-          <li>Project management</li>
-          <li>Mixed methods research</li>
-          <li>Design &amp; development</li>
-          <li>Usability &amp; experience testing</li>
-          <li>Prototyping &amp; wireframing</li>
-          <li>Problem-solving</li>
-          <li>Creativity</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="section">
-      <div class="container">
-        <h2>Contact</h2>
-        <p>
-          If you’d like to connect about research, design, or collaborative projects,
-          feel free to reach out.
-        </p>
-        <p class="contact-line">
-          Email:
-          <span class="contact-value">ericyang.yang@mail.utoronto.ca</span>
-          <!-- Example: <a href="mailto:youremail@domain.com">youremail@domain.com</a> -->
-        </p>
-        <p class="contact-line">
-          GitHub:
-          <a class="contact-value" href="https://github.com/insect0114/ericyang.github.io" target="_blank" rel="noreferrer">
-            github.com/insect0114/ericyang.github.io
-          </a>
-        </p>
+      <div class="contact-card reveal">
+        <a class="button primary" href="mailto:ericyang.yang@mail.utoronto.ca">ericyang.yang@mail.utoronto.ca</a>
+        <a class="button ghost" href="https://github.com/EricYangDev" target="_blank" rel="noreferrer">GitHub</a>
+        <button class="button ghost" type="button" id="copy-email">Copy Email</button>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Eric Yang. All rights reserved.</p>
-    </div>
+    <p>© <span id="year"></span> Eric Yang. Built with HTML, CSS, and JavaScript.</p>
   </footer>
 </body>
 </html>

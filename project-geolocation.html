@@ -1,205 +1,147 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="auto">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geolocation RPG – Eric Yang</title>
+  <title>Outdoor Quest Generator | Eric Yang</title>
+  <meta name="description" content="Interactive serious-games case study by Eric Yang: a privacy-first outdoor quest generator for movement and reflection." />
+  <meta name="theme-color" content="#0b1220" />
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
   <header class="site-header">
-    <div class="container header-inner">
-      <a href="index.html" class="logo" style="text-decoration: none; color: inherit;">
-        <span class="logo-name">Eric Yang</span>
-        <span class="logo-tagline">Technology · Media · Research</span>
+    <nav class="nav-shell" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="Eric Yang home">
+        <span class="brand-mark" aria-hidden="true">EY</span>
+        <span>
+          <strong>Eric Yang</strong>
+          <small>Interactive EdTech Developer</small>
+        </span>
       </a>
-
-      <nav class="nav">
-        <a href="index.html#about">About</a>
-        <a href="index.html#projects">Projects</a>
-        <a href="index.html#skills">Skills</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu"><span>Menu</span></button>
+      <div class="nav-links" id="nav-menu">
+        <a href="index.html#demo-lab">Demo Lab</a>
+        <a href="project-mixed-methods.html">Care Demo</a>
+        <a href="project-graphic-design.html">QA Lab</a>
         <a href="index.html#contact">Contact</a>
-      </nav>
-
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-        ◑
-      </button>
-    </div>
+        <button class="theme-toggle" type="button" aria-label="Switch color theme">◐</button>
+      </div>
+    </nav>
   </header>
 
-  <main>
-    <section class="section">
-      <div class="container">
-        <p style="margin-bottom: 0.75rem;">
-          <a href="index.html#projects" style="text-decoration: none; font-size: 0.85rem;">
-            ← Back to Projects
-          </a>
+  <main id="main">
+    <section class="page-hero section-grid">
+      <div class="hero-copy reveal">
+        <a class="back-link" href="index.html#case-studies">← Back to case studies</a>
+        <p class="eyebrow">Case Study 02 • Serious Games + Movement</p>
+        <h1>Outdoor Quest Generator</h1>
+        <p class="hero-text">
+          A privacy-first serious game prototype that transforms a short walk into a micro quest with narrative goals, reflection prompts, and motivation design notes.
         </p>
-
-        <h1>Geolocation RPG</h1>
-        <p class="meta" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
-          Role: Research · Prototyping · Documentation
-        </p>
-
-        <!-- Overview -->
-        <h2>Overview</h2>
-        <p>
-          Geolocation RPG is a location-tracking game inspired by Dungeons and Dragons that
-          encourages players to move through real-world spaces while engaging with narrative,
-          choice, and character progression. The project explores how location-based mechanics
-          and ethical storytelling can support physical, mental, and spiritual well-being.
-        </p>
-
-        <!-- Context & Goals -->
-        <h2>Context & Goals</h2>
-        <p>
-          This project sits at the intersection of game design, user psychology, and media
-          studies. The primary goal is to understand how geolocation mechanics and narrative
-          structure can:
-        </p>
-        <ul>
-          <li>Encourage players to explore their surroundings in meaningful ways,</li>
-          <li>Motivate play through implicit rewards rather than explicit rewards, and</li>
-          <li>Support different dimensions of well-being through quests and story events.</li>
-        </ul>
-        <p>
-          Design questions guiding the project include how far we can push tabletop-style
-          roleplaying and decision-making into a location-based format without overwhelming
-          players and ensuring the game can be played anywhere.
-        </p>
-
-        <!-- Core Design -->
-        <h2>Core Design</h2>
-        <p>
-          The game is structured around a node-based map of locations, each tied to
-          quests, encounters, or story beats. Players move between nodes in the real world
-          and unlock:
-        </p>
-        <ul>
-          <li>
-            <strong>Story encounters</strong> – spiritually enrichening choices and dialog,
-          </li>
-          <li>
-            <strong>Combat mechanics</strong> – enemy encounters that are fun and engaging,
-          </li>
-          <li>
-            <strong>Class and character progression</strong> – light RPG-style upgrades suitable for both casual and competitive players.
-          </li>
-        </ul>
-        <p>
-          The system borrows from tabletop RPGs (D&amp;D-style roles and narrative branching) while
-          remaining lightweight enough to be used in everyday life.
-        </p>
-            <!-- Visuals -->
-    <section class="proj-media">
-      <h2>Visuals</h2>
-      <p>
-        These early visual documents explore how quests are generated, how players read
-        icons and choices, and how the setup flow defines a safe, scalable play area.
-      </p>
-
-      <!-- Quests & gameplay mockup + icons -->
-      <div class="proj-image-grid proj-image-grid--two">
-        <figure class="proj-image-card">
-          <img src="images/base_game_small.png"
-               alt="Mockup of randomly generated quests, difficulty routes, and gameplay icons for the Geolocation RPG">
-          <figcaption>
-            Quest and icon mockups showing how random quests are generated within a radius,
-            how routes scale from easy to hard, and how different icon types communicate
-            secret areas, enemy encounters, bosses, and home/rest locations.
-          </figcaption>
-        </figure>
-
-        <figure class="proj-image-card">
-          <img src="images/GeoMotivationDiagram.png"
-               alt="Diagram comparing forced geolocation motivation loop with non-geolocated honor system loop">
-          <figcaption>
-            Motivation model comparing a forced-geolocation design with an honor-system model
-            where intrinsic motivation (desire to explore, learn, and create) comes before
-            the platform and its levels.
-          </figcaption>
-        </figure>
+        <div class="hero-actions">
+          <a class="button primary" href="#quest-demo">Generate Quest</a>
+          <a class="button ghost" href="#system-model">View System Model</a>
+        </div>
       </div>
+      <aside class="hero-panel reveal">
+        <div class="panel-topline"><span class="status-dot"></span><span>Prototype principle</span></div>
+        <h2>No GPS required</h2>
+        <p>The demo avoids location tracking and instead models how movement-based quests can work through safe, flexible prompts.</p>
+      </aside>
+    </section>
 
-      <!-- Setup process document -->
-      <div class="proj-image-grid">
-        <figure class="proj-image-card">
-          <img src="images/setup_process.png"
-               alt="Setup process document showing account creation, node placement, radius selection, and adventure generation">
-          <figcaption>
-            Setup process document outlining account creation, defining a home location and
-            adventure radius, placing accessible nodes, and generating personalized adventures
-            based on those nodes anywhere in the world.
-          </figcaption>
-        </figure>
+    <section class="section split-section" id="system-model">
+      <div class="section-heading reveal">
+        <p class="eyebrow">System Model</p>
+        <h2>Movement becomes meaningful when it has choice, story, and feedback.</h2>
+      </div>
+      <div class="rich-text reveal">
+        <div class="note-grid">
+          <div class="note-card">
+            <strong>Input</strong>
+            <span>User goal, time available, motivation lens, and optional environment type.</span>
+          </div>
+          <div class="note-card">
+            <strong>Game loop</strong>
+            <span>Choose quest → move safely → observe surroundings → reflect → earn badge.</span>
+          </div>
+          <div class="note-card">
+            <strong>Output</strong>
+            <span>A small, playable activity that can be tested without a full mobile app.</span>
+          </div>
+        </div>
       </div>
     </section>
 
-        <!-- Process -->
-        <h2>Process</h2>
-        <p>
-          The current state of the project has gone through several phases:
-        </p>
-        <ol>
-          <li>
-            <strong>Concept &amp; system sketching:</strong> defining the core loop, procedural node generation system, 
-            and how tabletop-style decision-making could map onto GPS-based movement.
-          </li>
-          <li>
-            <strong>Narrative and quest design:</strong> superimposing a narrative which aligns with
-            the random node generation, and quests of various difficulties, improving cardio exercise
-          </li>
-          <li>
-            <strong>Prototype documentation:</strong> building design documents and flow diagrams to support future
-            digital implementations.
-          </li>
-          <li>
-            <strong>Early playtesting plans:</strong> preparing small-scale tests to validate whether the structure
-            feels engaging without being burdensome.
-          </li>
-        </ol>
+    <section class="section" aria-labelledby="quest-title-section">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Live Demo</p>
+        <h2 id="quest-title-section">Generate a safe outdoor micro quest</h2>
+      </div>
+      <article class="lab-demo reveal" id="quest-demo" data-demo="quest">
+        <div class="demo-header">
+          <div>
+            <p class="eyebrow">Serious Games Demo</p>
+            <h3>Outdoor Quest Generator</h3>
+          </div>
+          <span class="demo-time">Movement-first design</span>
+        </div>
+        <div class="demo-shell two-column">
+          <form class="control-panel" id="quest-form">
+            <label class="field-label" for="quest-goal">Goal</label>
+            <select id="quest-goal">
+              <option value="light">Light walk</option>
+              <option value="explore">Explore somewhere nearby</option>
+              <option value="reflect">Reflect and decompress</option>
+              <option value="challenge">Challenge mode</option>
+            </select>
 
-        <!-- Tools & Contributions -->
-        <h2>Tools & Responsibilities</h2>
-        <p>
-          My contributions to Geolocation RPG include:
-        </p>
-        <ul>
-          <li>Designing the core game loop and node/region structure,</li>
-          <li>Drafting quests, events, and reflective prompts for different location types,</li>
-          <li>Documenting rules, flows, and system behavior for future implementation,</li>
-          <li>Prototyping combat mechanics and node systems using Python, and</li>
-          <li>Defining an initial research plan for evaluating engagement and well-being outcomes.</li>
+            <label class="field-label" for="quest-time">Time available</label>
+            <select id="quest-time">
+              <option value="5">5 minutes</option>
+              <option value="15" selected>15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="45">45 minutes</option>
+            </select>
+
+            <label class="field-label" for="quest-motivation">Motivation lens</label>
+            <select id="quest-motivation">
+              <option value="intrinsic">Intrinsic curiosity</option>
+              <option value="narrative">Narrative quest</option>
+              <option value="social">Social accountability</option>
+              <option value="reward">Reward badge</option>
+            </select>
+
+            <button class="button primary" type="submit">Generate Quest</button>
+          </form>
+          <div class="output-panel quest-output" id="quest-output" aria-live="polite">
+            <p class="muted">Choose your settings to generate a small, safe, real-world quest. No location tracking required.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section split-section">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Design Notes</p>
+        <h2>What this demonstrates</h2>
+      </div>
+      <div class="rich-text reveal">
+        <ul class="feature-list">
+          <li><strong>Serious games design:</strong> makes a health-related behavior more engaging without relying only on points.</li>
+          <li><strong>Ethical interaction:</strong> avoids requiring personal location data for the website demo.</li>
+          <li><strong>Rapid prototyping:</strong> models game mechanics in plain JavaScript before investing in a larger mobile or Unity build.</li>
+          <li><strong>Evaluation pathway:</strong> future tests could compare motivation, completion rate, and reflection quality across quest types.</li>
         </ul>
-        <p>
-          Tools used include digital documentation and mapping tools for structuring regions and
-          nodes, along with standard design and note-taking software for iteration.
-        </p>
-
-        <!-- Status / Next Steps -->
-        <h2>Status & Next Steps</h2>
-        <p>
-          The project is currently in the documented prototype stage, with system rules, narrative
-          beats, and node structures outlined. Next steps include:
-        </p>
-        <ul>
-          <li>Building a small digital or hybrid prototype to test with a limited group of players,</li>
-          <li>Collecting initial feedback on usability, motivation, and narrative clarity, and</li>
-          <li>Refining mechanics based on real-world play and movement patterns.</li>
-        </ul>
-
-        <p style="margin-top: 2rem;">
-          <a href="index.html#projects" class="btn-primary">Back to All Projects</a>
-        </p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Eric Yang. All rights reserved.</p>
-    </div>
+    <p>© <span id="year"></span> Eric Yang. Built with HTML, CSS, and JavaScript.</p>
   </footer>
 </body>
 </html>

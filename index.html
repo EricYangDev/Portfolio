@@ -3,47 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta
-    name="description"
-    content="Eric Yang — Jack-of-all Trades Portfolio and interactive eight-domain capability map."
-  >
-
+  <meta name="description" content="Eric Yang — Jack-of-all Trades Portfolio and interactive eight-domain capability map.">
   <title>Eric Yang | Jack-of-all Trades Portfolio</title>
-
-  <link rel="stylesheet" href="./style.css?v=20260712-2">
+  <link rel="stylesheet" href="./style.css?v=20260712-3">
 </head>
-
 <body>
   <div class="portfolio-page">
     <section class="portfolio-hero" aria-labelledby="portfolio-title">
       <p class="portfolio-kicker">Portfolio</p>
-
       <h1 id="portfolio-title">Eric Yang</h1>
-
-      <p class="portfolio-tagline">
-        Jack-of-all Trades Portfolio
-      </p>
-
-      <p class="portfolio-intro">
-        An interactive overview of the technical, creative, research,
-        educational, and project-delivery capabilities I use to build
-        practical learning experiences and digital products.
-      </p>
+      <p class="portfolio-tagline">Jack-of-all Trades Portfolio</p>
+      <p class="portfolio-intro">An interactive overview of the technical, creative, research, educational, and project-delivery capabilities I use to build practical learning experiences and digital products.</p>
     </section>
 
-    <section
-      class="capability-section"
-      aria-labelledby="capability-title"
-    >
+    <section class="capability-section" aria-labelledby="capability-title">
       <div class="capability-heading">
-        <h2 id="capability-title">
-          Eight-Domain Capability Map
-        </h2>
-
-        <p>
-          Hover a large domain to explore its branch. Return to the
-          center before switching to another domain.
-        </p>
+        <h2 id="capability-title">Eight-Domain Capability Map</h2>
+        <p>Hover a large domain to explore its branch. Return to the center before switching to another domain.</p>
       </div>
 
       <div class="capability-shell">
@@ -53,69 +29,34 @@
               <b>ERIC YANG</b>
               <span>Capability Octagon</span>
             </div>
-
             <div class="search">
-              <input
-                id="search"
-                type="search"
-                aria-label="Search skills and capabilities"
-                placeholder="Search skills and capabilities"
-              >
+              <input id="search" type="search" aria-label="Search skills and capabilities" placeholder="Search skills and capabilities">
             </div>
-
-            <div class="status">
-              <i></i>
-              COLLISION-SAFE RADIAL BRANCHES
-            </div>
+            <div class="status"><i></i>COLLISION-SAFE RADIAL BRANCHES</div>
           </div>
 
           <div class="skill-main">
-            <section
-              class="stage"
-              id="stage"
-              aria-label="Interactive eight-domain capability map"
-            >
+            <section class="stage" id="stage" aria-label="Interactive eight-domain capability map">
               <svg id="links" aria-hidden="true"></svg>
-
               <div class="center-mark" id="centerMark">
                 <div class="center-copy">
                   <span class="center-icon">↺</span>
-
-                  <strong class="center-title" id="centerTitle">
-                    Choose a domain
-                  </strong>
-
-                  <span class="center-hint" id="centerHint">
-                    Hover a large bubble
-                  </span>
+                  <strong class="center-title" id="centerTitle">Choose a domain</strong>
+                  <span class="center-hint" id="centerHint">Hover a large bubble</span>
                 </div>
               </div>
-
-              <div id="skillMapFallback" class="skill-map-fallback">
-                Loading capability map…
-              </div>
-
+              <div id="skillMapFallback" class="skill-map-fallback">Loading capability map…</div>
               <div id="nodes"></div>
-
               <div class="lens" id="lens"></div>
-
-              <div class="legend">
-                Return to the center before switching branches ·
-                Sibling bubbles cannot overlap
-              </div>
+              <div class="legend">Return to the center before switching branches · Sibling bubbles cannot overlap</div>
             </section>
-
-            <aside
-              class="panel"
-              id="panel"
-              aria-live="polite"
-            ></aside>
+            <aside class="panel" id="panel" aria-live="polite"></aside>
           </div>
         </div>
       </div>
     </section>
   </div>
 
-  <script src="./script.js?v=20260712-2" defer></script>
+  <script src="./script.js?v=20260712-3" defer></script>
 </body>
 </html>

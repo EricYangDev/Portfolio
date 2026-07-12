@@ -1,329 +1,61 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Personal portfolio website." />
-  <title>Eric Yang | Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Eric Yang — Jack-of-all Trades Portfolio and interactive eight-domain capability map.">
+  <title>Eric Yang | Jack-of-all Trades Portfolio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="site-bg">
-    <div class="grid-overlay"></div>
-    <div class="blob blob-one"></div>
-    <div class="blob blob-two"></div>
+  <div class="portfolio-page">
+    <section class="portfolio-hero" aria-labelledby="portfolio-title">
+      <p class="portfolio-kicker">Portfolio</p>
+      <h1 id="portfolio-title">Eric Yang</h1>
+      <p class="portfolio-tagline">Jack-of-all Trades Portfolio</p>
+      <p class="portfolio-intro">An interactive overview of the technical, creative, research, educational, and project-delivery capabilities I use to build practical learning experiences and digital products.</p>
+    </section>
+
+    <section class="capability-section" aria-labelledby="capability-title">
+      <div class="capability-heading">
+        <h2 id="capability-title">Eight-Domain Capability Map</h2>
+        <p>Hover a large domain to explore its branch. Return to the center before switching to another domain.</p>
+      </div>
+
+      <div class="capability-shell">
+        <div class="skill-app">
+          <div class="skill-toolbar">
+            <div class="brand">
+              <b>ERIC YANG</b>
+              <span>Capability Octagon</span>
+            </div>
+            <div class="search">
+              <input id="search" type="search" aria-label="Search skills and capabilities" placeholder="Search skills and capabilities">
+            </div>
+            <div class="status"><i></i>COLLISION-SAFE RADIAL BRANCHES</div>
+          </div>
+
+          <div class="skill-main">
+            <section class="stage" id="stage" aria-label="Interactive eight-domain capability map">
+              <svg id="links" aria-hidden="true"></svg>
+              <div class="center-mark" id="centerMark">
+                <div class="center-copy">
+                  <span class="center-icon">↺</span>
+                  <strong class="center-title" id="centerTitle">Choose a domain</strong>
+                  <span class="center-hint" id="centerHint">Hover a large bubble</span>
+                </div>
+              </div>
+              <div id="nodes"></div>
+              <div class="lens" id="lens"></div>
+              <div class="legend">Return to the center before switching branches · Sibling bubbles cannot overlap</div>
+            </section>
+            <aside class="panel" id="panel" aria-live="polite"></aside>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <header class="header" id="top">
-    <nav class="nav">
-      <a href="#top" class="logo" aria-label="Home">
-        <span class="logo-mark">EY</span>
-        <span class="logo-text">Eric Yang</span>
-      </a>
-
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <div class="nav-links" id="navLinks">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <span id="themeIcon">☾</span>
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero section">
-      <div class="hero-content reveal">
-        <p class="eyebrow">Interactive Developer Portfolio</p>
-        <h1>Building clean, useful, and interactive digital experiences.</h1>
-        <p class="hero-copy">
-          A flexible portfolio template for projects, case studies, technical demos,
-          research work, and creative experiments.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#projects" class="btn primary">View Projects</a>
-          <a href="#contact" class="btn secondary">Contact Me</a>
-        </div>
-
-        <div class="hero-stats">
-          <div>
-            <strong>03</strong>
-            <span>Featured demos</span>
-          </div>
-          <div>
-            <strong>10+</strong>
-            <span>Skill areas</span>
-          </div>
-          <div>
-            <strong>100%</strong>
-            <span>Customizable</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-panel reveal">
-        <div class="terminal-card">
-          <div class="terminal-top">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <pre><code>const portfolio = {
-  focus: "interactive systems",
-  stack: ["HTML", "CSS", "JavaScript"],
-  status: "ready to customize",
-};</code></pre>
-        </div>
-
-        <div class="floating-card card-a">
-          <span>UX</span>
-          <p>Clean user flows</p>
-        </div>
-
-        <div class="floating-card card-b">
-          <span>JS</span>
-          <p>Interactive demos</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section about" id="about">
-      <div class="section-heading reveal">
-        <p class="eyebrow">About</p>
-        <h2>A simple foundation for a stronger portfolio.</h2>
-      </div>
-
-      <div class="about-grid">
-        <article class="glass-card reveal">
-          <h3>What I do</h3>
-          <p>
-            I design and build interactive web experiences that combine clear interfaces,
-            structured content, and practical functionality.
-          </p>
-        </article>
-
-        <article class="glass-card reveal">
-          <h3>How I work</h3>
-          <p>
-            I focus on clarity, responsiveness, usability, and fast iteration.
-            This page is designed to be easy to edit as new work is added.
-          </p>
-        </article>
-
-        <article class="glass-card reveal">
-          <h3>What this site is for</h3>
-          <p>
-            Use this space for technical projects, visual demos, case studies,
-            research, design work, or professional experience.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section projects" id="projects">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Projects</p>
-        <h2>Featured work</h2>
-        <p>
-          Replace these placeholder projects with your own demos later.
-        </p>
-      </div>
-
-      <div class="filter-row reveal">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="web">Web</button>
-        <button class="filter-btn" data-filter="design">Design</button>
-        <button class="filter-btn" data-filter="research">Research</button>
-      </div>
-
-      <div class="project-grid">
-        <article class="project-card reveal" data-category="web">
-          <div class="project-preview gradient-one">
-            <span>Demo 01</span>
-          </div>
-          <div class="project-body">
-            <p class="project-type">Interactive Web</p>
-            <h3>Branching Experience Demo</h3>
-            <p>
-              A placeholder project for an interactive web system, prototype,
-              learning tool, or game-like experience.
-            </p>
-            <div class="tags">
-              <span>JavaScript</span>
-              <span>UI</span>
-              <span>Prototype</span>
-            </div>
-            <button
-              class="text-btn modal-trigger"
-              data-title="Branching Experience Demo"
-              data-description="Use this modal to describe the problem, your role, the tools used, and the final outcome. Add screenshots or replace this with a full project page later."
-              data-tools="HTML, CSS, JavaScript"
-            >
-              View details →
-            </button>
-          </div>
-        </article>
-
-        <article class="project-card reveal" data-category="design">
-          <div class="project-preview gradient-two">
-            <span>Demo 02</span>
-          </div>
-          <div class="project-body">
-            <p class="project-type">Design System</p>
-            <h3>Interface Redesign Concept</h3>
-            <p>
-              A placeholder project for a UI redesign, product concept,
-              visual identity, or design case study.
-            </p>
-            <div class="tags">
-              <span>UX</span>
-              <span>Visual Design</span>
-              <span>Branding</span>
-            </div>
-            <button
-              class="text-btn modal-trigger"
-              data-title="Interface Redesign Concept"
-              data-description="Use this modal to explain the old problem, the redesigned solution, and the design decisions that improved the experience."
-              data-tools="Figma, UX Research, Prototyping"
-            >
-              View details →
-            </button>
-          </div>
-        </article>
-
-        <article class="project-card reveal" data-category="research">
-          <div class="project-preview gradient-three">
-            <span>Demo 03</span>
-          </div>
-          <div class="project-body">
-            <p class="project-type">Research</p>
-            <h3>Data Storytelling Project</h3>
-            <p>
-              A placeholder project for research, analysis, user testing,
-              reports, or evidence-based product decisions.
-            </p>
-            <div class="tags">
-              <span>Research</span>
-              <span>Analysis</span>
-              <span>Storytelling</span>
-            </div>
-            <button
-              class="text-btn modal-trigger"
-              data-title="Data Storytelling Project"
-              data-description="Use this modal to summarize the research question, methods, findings, and how the results influenced the final output."
-              data-tools="Research, Analysis, Presentation"
-            >
-              View details →
-            </button>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section skills" id="skills">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Skills</p>
-        <h2>Tools and strengths</h2>
-      </div>
-
-      <div class="skills-grid reveal">
-        <div class="skill-group">
-          <h3>Development</h3>
-          <div class="skill-list">
-            <span>HTML</span>
-            <span>CSS</span>
-            <span>JavaScript</span>
-            <span>Responsive Design</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <h3>Design</h3>
-          <div class="skill-list">
-            <span>UI Design</span>
-            <span>UX Thinking</span>
-            <span>Wireframing</span>
-            <span>Prototyping</span>
-          </div>
-        </div>
-
-        <div class="skill-group">
-          <h3>Production</h3>
-          <div class="skill-list">
-            <span>Documentation</span>
-            <span>Testing</span>
-            <span>Iteration</span>
-            <span>Project Planning</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact" id="contact">
-      <div class="contact-card reveal">
-        <div>
-          <p class="eyebrow">Contact</p>
-          <h2>Let’s build something useful.</h2>
-          <p>
-            Replace this text with your real contact message, resume link,
-            GitHub link, LinkedIn, or professional email.
-          </p>
-        </div>
-
-        <form class="contact-form" id="contactForm">
-          <label>
-            Name
-            <input type="text" name="name" placeholder="Your name" required />
-          </label>
-
-          <label>
-            Email
-            <input type="email" name="email" placeholder="your@email.com" required />
-          </label>
-
-          <label>
-            Message
-            <textarea name="message" placeholder="Write your message..." required></textarea>
-          </label>
-
-          <button type="submit" class="btn primary">Create Email Draft</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© <span id="year"></span> Eric Yang. All rights reserved.</p>
-    <a href="#top">Back to top ↑</a>
-  </footer>
-
-  <div class="modal" id="projectModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close-modal></div>
-
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" data-close-modal aria-label="Close modal">×</button>
-      <p class="eyebrow">Project Details</p>
-      <h2 id="modalTitle">Project title</h2>
-      <p id="modalDescription">Project description</p>
-
-      <div class="modal-tools">
-        <h3>Tools</h3>
-        <p id="modalTools">HTML, CSS, JavaScript</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">Email draft created.</div>
+  <script src="script.js"></script>
 </body>
 </html>

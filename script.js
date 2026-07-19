@@ -1,4 +1,93 @@
 (() => {
+  const canvas = document.getElementById('voidStars');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let stars = [];
+  let last = performance.now();
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function randomStar() {
+    const depth = Math.random();
+    return {
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: 0.35 + Math.pow(depth, 2) * 1.55,
+      speedX: (0.6 + depth * 1.3) * (Math.random() < 0.5 ? -1 : 1),
+      speedY: 1.0 + depth * 2.2,
+      alpha: 0.18 + depth * 0.72,
+      phase: Math.random() * Math.PI * 2,
+      twinkle: 0.18 + Math.random() * 0.65,
+      tint: Math.random()
+    };
+  }
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.max(1, Math.floor(width * dpr));
+    canvas.height = Math.max(1, Math.floor(height * dpr));
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const target = Math.max(150, Math.min(440, Math.round((width * height) / 5200)));
+    stars = Array.from({ length: target }, randomStar);
+  }
+
+  function draw(now) {
+    const dt = Math.min(0.04, (now - last) / 1000);
+    last = now;
+    ctx.clearRect(0, 0, width, height);
+
+    for (const star of stars) {
+      if (!reducedMotion) {
+        star.x += star.speedX * dt;
+        star.y += star.speedY * dt;
+      }
+      if (star.x < -4) star.x = width + 4;
+      if (star.x > width + 4) star.x = -4;
+      if (star.y > height + 4) {
+        star.y = -4;
+        star.x = Math.random() * width;
+      }
+
+      const pulse = 0.68 + Math.sin(now * 0.0012 * star.twinkle + star.phase) * 0.32;
+      const alpha = Math.max(0.05, star.alpha * pulse);
+      const glow = star.size > 1.15;
+      const rgb = star.tint > 0.84 ? '190,213,255' : star.tint > 0.68 ? '184,160,255' : '238,247,255';
+
+      if (glow) {
+        const radius = star.size * 5;
+        const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, radius);
+        gradient.addColorStop(0, `rgba(${rgb},${alpha * 0.28})`);
+        gradient.addColorStop(1, `rgba(${rgb},0)`);
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = `rgba(${rgb},${alpha})`;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+  requestAnimationFrame(draw);
+})();
+
+(() => {
 const SOURCE={
 "Programming":{"JavaScript, HTML, CSS":["Interactive UI logic","Regex-based development","Editable text-file systems","Custom engine creation"],"Python":["Data cleanup","Data visualization","Data analysis"],"Rapid prototyping":["Feedback integration","Interactable demos","Fast UI mockups","Experimental mechanics"]},
 "Game Creation":{"Game design":["Mechanics & gameplay loops","Progression & motivation","Ludology fundamentals"],"Level design":["3D level design","2D level design","Spatial flow analysis","Tutorial & onboarding","Difficulty balancing"],"Narrative systems":["Branching story writing","Dialogue scripting","Scene & outcome logic"],"Systems design":["In-game economies","Player-to-player trading","Progression systems"],"Documentation":["Visual documentation","Flowchart creation","Data sheet organization","Manual & guide writing"]},
@@ -10,15 +99,15 @@ const SOURCE={
 "Soft Skills":{"Problem solving":["Quality assurance testing","Replicating bugs & errors","Solution prioritization"],"Creativity":["Interdisciplinary knowledge","Visual brainstorming"],"Communication":["Simplifying complex systems","Writing guides for others","Listening & remembering","Understanding constraints"],"Leadership":["Leading small projects","Owning prototypes","Coordinating design direction","Decision-making under uncertainty"]}
 };
 const colors=['#6d79ff','#43c7ff','#b37cff','#f08ec2','#e9b65b','#58d0a0','#6fd3e9','#8c9cff'];
-const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint'),backgroundMusic=document.getElementById('backgroundMusic'),hoverChime=document.getElementById('hoverChime');
+const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint'),backgroundMusic=document.getElementById('backgroundMusic'),hoverChime=document.getElementById('hoverChime'),startScreen=document.getElementById('startScreen'),startExploring=document.getElementById('startExploring');
 const CATS=Object.keys(SOURCE),N=CATS.length;
 let nodes=[],edges=[],pointer={x:-9999,y:-9999,inside:false},layout={w:0,h:0,cx:0,cy:0,baseCx:0,baseCy:0,rx:0,ry:0,scale:1},activeCategory=null,activeSkill=null,activeMini=null,activeNode=null,lastPanel='',lockedAttempt=false,layoutDirty=true;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
 let audioUnlocked=false,audioUnlocking=null,hoverFadeFrame=0,lastHoverAudioKey='',lastHoverAudioAt=0;
-const BG_VOLUME=.028;
-const CHIME_PEAK=.20;
+const BG_VOLUME=.075;
+const CHIME_PEAK=.34;
 
 function unlockAudio(){
   if(audioUnlocked)return Promise.resolve(true);
@@ -32,7 +121,7 @@ function unlockAudio(){
     }
     if(hoverChime){
       hoverChime.volume=0;
-      results.push(await hoverChime.play().then(()=>true).catch(()=>false));
+      results.push(await hoverChime.play().then(()=>{hoverChime.pause();hoverChime.currentTime=0;return true}).catch(()=>false));
     }
     audioUnlocked=results.length>0&&results.every(Boolean);
     if(audioUnlocked&&backgroundMusic){
@@ -54,15 +143,15 @@ function unlockAudio(){
 }
 
 async function playHoverChime(){
-  if(!hoverChime||!(await unlockAudio()))return;
+  if(!document.body.classList.contains('started')||!hoverChime||!(await unlockAudio()))return;
   cancelAnimationFrame(hoverFadeFrame);
   const usableDuration=Math.min(25.6,Number.isFinite(hoverChime.duration)?hoverChime.duration-.45:25.6);
   try{hoverChime.currentTime=Math.max(0,Math.random()*Math.max(.1,usableDuration));}catch(_){ }
   hoverChime.volume=0;
   await hoverChime.play().catch(()=>{});
   const started=performance.now();
-  const duration=400;
-  const rise=120;
+  const duration=700;
+  const rise=190;
   const envelope=now=>{
     const elapsed=now-started;
     let volume=0;
@@ -85,8 +174,19 @@ function updateHoverAudio(){
   lastHoverAudioKey=key;
 }
 
-['pointerdown','touchstart','keydown','pointermove'].forEach(type=>window.addEventListener(type,unlockAudio,{once:true,passive:true}));
-backgroundMusic?.play().catch(()=>{});
+if(backgroundMusic){
+  backgroundMusic.addEventListener('timeupdate',()=>{
+    if(backgroundMusic.currentTime>=65.9)backgroundMusic.currentTime=0;
+  });
+}
+
+startExploring?.addEventListener('click',async()=>{
+  startExploring.disabled=true;
+  startExploring.textContent='Entering...';
+  document.body.classList.add('started');
+  await unlockAudio();
+  window.setTimeout(()=>startScreen?.remove(),760);
+});
 
 function makeNode(label,type,ci,meta={}){const el=document.createElement('div');el.className='node '+type;el.style.setProperty('--c',colors[ci]);el.innerHTML='<div class="label">'+esc(label)+'</div>';nodesEl.appendChild(el);const n={label,type,ci,el,px:0,py:0,tx:0,ty:0,displayScale:1,baseW:0,baseH:0,hit:false,categoryHit:false,skillHit:false,...meta};nodes.push(n);return n}
 function makeEdge(a,b,kind='branch'){const el=document.createElementNS('http://www.w3.org/2000/svg','line');el.classList.add('edge');if(kind==='core')el.classList.add('core');else el.classList.add('hidden');linksEl.appendChild(el);const e={a,b,kind,el};edges.push(e);return e}

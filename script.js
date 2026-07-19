@@ -10,12 +10,84 @@ const SOURCE={
 "Soft Skills":{"Problem solving":["Quality assurance testing","Replicating bugs & errors","Solution prioritization"],"Creativity":["Interdisciplinary knowledge","Visual brainstorming"],"Communication":["Simplifying complex systems","Writing guides for others","Listening & remembering","Understanding constraints"],"Leadership":["Leading small projects","Owning prototypes","Coordinating design direction","Decision-making under uncertainty"]}
 };
 const colors=['#6d79ff','#43c7ff','#b37cff','#f08ec2','#e9b65b','#58d0a0','#6fd3e9','#8c9cff'];
-const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),search=document.getElementById('search'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint');
+const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint'),backgroundMusic=document.getElementById('backgroundMusic'),hoverChime=document.getElementById('hoverChime');
 const CATS=Object.keys(SOURCE),N=CATS.length;
 let nodes=[],edges=[],pointer={x:-9999,y:-9999,inside:false},layout={w:0,h:0,cx:0,cy:0,baseCx:0,baseCy:0,rx:0,ry:0,scale:1},activeCategory=null,activeSkill=null,activeMini=null,activeNode=null,lastPanel='',lockedAttempt=false,layoutDirty=true;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
+let audioUnlocked=false,audioUnlocking=null,hoverFadeFrame=0,lastHoverAudioKey='',lastHoverAudioAt=0;
+const BG_VOLUME=.028;
+const CHIME_PEAK=.20;
+
+function unlockAudio(){
+  if(audioUnlocked)return Promise.resolve(true);
+  if(audioUnlocking)return audioUnlocking;
+  audioUnlocking=(async()=>{
+    const results=[];
+    if(backgroundMusic){
+      backgroundMusic.muted=false;
+      backgroundMusic.volume=0;
+      results.push(await backgroundMusic.play().then(()=>true).catch(()=>false));
+    }
+    if(hoverChime){
+      hoverChime.volume=0;
+      results.push(await hoverChime.play().then(()=>true).catch(()=>false));
+    }
+    audioUnlocked=results.length>0&&results.every(Boolean);
+    if(audioUnlocked&&backgroundMusic){
+      const started=performance.now();
+      const fade=now=>{
+        const t=Math.min(1,(now-started)/1400);
+        backgroundMusic.volume=BG_VOLUME*t;
+        if(t<1)requestAnimationFrame(fade);
+      };
+      requestAnimationFrame(fade);
+      lastHoverAudioKey='';
+    }else if(backgroundMusic){
+      backgroundMusic.muted=true;
+    }
+    audioUnlocking=null;
+    return audioUnlocked;
+  })();
+  return audioUnlocking;
+}
+
+async function playHoverChime(){
+  if(!hoverChime||!(await unlockAudio()))return;
+  cancelAnimationFrame(hoverFadeFrame);
+  const usableDuration=Math.min(25.6,Number.isFinite(hoverChime.duration)?hoverChime.duration-.45:25.6);
+  try{hoverChime.currentTime=Math.max(0,Math.random()*Math.max(.1,usableDuration));}catch(_){ }
+  hoverChime.volume=0;
+  await hoverChime.play().catch(()=>{});
+  const started=performance.now();
+  const duration=400;
+  const rise=120;
+  const envelope=now=>{
+    const elapsed=now-started;
+    let volume=0;
+    if(elapsed<rise)volume=CHIME_PEAK*(elapsed/rise);
+    else if(elapsed<duration)volume=CHIME_PEAK*(1-(elapsed-rise)/(duration-rise));
+    hoverChime.volume=Math.max(0,Math.min(CHIME_PEAK,volume));
+    if(elapsed<duration)hoverFadeFrame=requestAnimationFrame(envelope);
+    else hoverChime.volume=0;
+  };
+  hoverFadeFrame=requestAnimationFrame(envelope);
+}
+
+function updateHoverAudio(){
+  const key=activeNode?[activeNode.type,activeNode.category,activeNode.skill,activeNode.mini||activeNode.label].filter(Boolean).join('|'):'';
+  const now=performance.now();
+  if(key&&key!==lastHoverAudioKey&&now-lastHoverAudioAt>120){
+    lastHoverAudioAt=now;
+    playHoverChime();
+  }
+  lastHoverAudioKey=key;
+}
+
+['pointerdown','touchstart','keydown','pointermove'].forEach(type=>window.addEventListener(type,unlockAudio,{once:true,passive:true}));
+backgroundMusic?.play().catch(()=>{});
+
 function makeNode(label,type,ci,meta={}){const el=document.createElement('div');el.className='node '+type;el.style.setProperty('--c',colors[ci]);el.innerHTML='<div class="label">'+esc(label)+'</div>';nodesEl.appendChild(el);const n={label,type,ci,el,px:0,py:0,tx:0,ty:0,displayScale:1,baseW:0,baseH:0,hit:false,categoryHit:false,skillHit:false,...meta};nodes.push(n);return n}
 function makeEdge(a,b,kind='branch'){const el=document.createElementNS('http://www.w3.org/2000/svg','line');el.classList.add('edge');if(kind==='core')el.classList.add('core');else el.classList.add('hidden');linksEl.appendChild(el);const e={a,b,kind,el};edges.push(e);return e}
 function baseSize(n){
@@ -31,8 +103,8 @@ function boundsSize(n){const b=baseSize(n);const scale=Math.max(.82,n.displaySca
 function rect(n,useTarget=true,pad=0,useScaled=true){const size=useScaled?boundsSize(n):baseSize(n);const x=useTarget?n.tx:n.px,y=useTarget?n.ty:n.py;return {l:x-size.w/2-pad,r:x+size.w/2+pad,t:y-size.h/2-pad,b:y+size.h/2+pad,w:size.w,h:size.h}}
 function overlaps(a,b){return a.l<b.r&&a.r>b.l&&a.t<b.b&&a.b>b.t}
 function build(){const r=stage.getBoundingClientRect();if(r.width<30||r.height<30)return;const scale=clamp(Math.min(r.width/1100,r.height/690),.78,1.12);layout={w:r.width,h:r.height,baseCx:r.width*.5,baseCy:r.height*.52,cx:r.width*.5,cy:r.height*.52,rx:clamp(r.width*.225,205,300),ry:clamp(r.height*.205,135,190),scale};document.documentElement.style.setProperty('--scale',scale.toFixed(3));nodes=[];edges=[];nodesEl.innerHTML='';linksEl.innerHTML='';activeCategory=activeSkill=activeMini=activeNode=null;lastPanel='';const catNodes=[];CATS.forEach((cat,i)=>catNodes.push(makeNode(cat,'category',i,{category:cat,index:i,baseAngle:-Math.PI/2+i*Math.PI*2/N})));catNodes.forEach((n,i)=>makeEdge(n,catNodes[(i+1)%N],'core'));catNodes.forEach((cn,ci)=>{const entries=Object.entries(SOURCE[cn.category]);entries.forEach(([skill,minis],si)=>{const sn=makeNode(skill,'skill',ci,{category:cn.category,parent:cn,skill,minis,skillIndex:si,skillCount:entries.length});makeEdge(cn,sn);minis.forEach((mini,mi)=>{const mn=makeNode(mini,'mini',ci,{category:cn.category,parent:sn,skill,mini,miniIndex:mi,miniCount:minis.length});makeEdge(sn,mn)})})});nodes.forEach(baseSize);computeTargets();layoutDirty=false;nodes.forEach(n=>{n.px=n.tx;n.py=n.ty});showIntro();render(true)}
-function skillVisible(n){const q=search.value.trim();return (!!activeCategory&&n.category===activeCategory)||(q&&(n.hit||n.categoryHit))}
-function miniVisible(n){const q=search.value.trim();return (!!activeSkill&&n.category===activeCategory&&n.skill===activeSkill.skill)||(q&&(n.hit||n.skillHit))}
+function skillVisible(n){return !!activeCategory&&n.category===activeCategory}
+function miniVisible(n){return !!activeSkill&&n.category===activeCategory&&n.skill===activeSkill.skill}
 function placeArc(group,parent,angle,radius,spread){if(!group.length)return;const count=group.length;const arc=count===1?0:Math.min(spread,Math.PI*.95);group.forEach((n,i)=>{const t=count===1?0:(i/(count-1)-.5);const a=angle+t*arc;n.branchAngle=a;n.tx=parent.tx+Math.cos(a)*radius;n.ty=parent.ty+Math.sin(a)*radius})}
 function separateRectangles(group,iterations=20,gap=10){
   let anyMoved=false;
@@ -258,7 +330,6 @@ function computeTargets(){
   }
   settleVisibleCards(cats,skillNodes);
 }
-function updateSearch(){const q=search.value.trim().toLowerCase();nodes.forEach(n=>{n.hit=n.categoryHit=n.skillHit=false;n.el.classList.remove('match')});if(!q)return;nodes.forEach(n=>{const text=[n.label,n.category,n.skill,n.mini].filter(Boolean).join(' ').toLowerCase();if(text.includes(q))n.hit=true});nodes.filter(n=>n.type==='mini'&&n.hit).forEach(n=>{nodes.forEach(m=>{if(m.type==='skill'&&m.category===n.category&&m.skill===n.skill)m.skillHit=true;if(m.type==='category'&&m.category===n.category)m.categoryHit=true})});nodes.filter(n=>n.type==='skill'&&n.hit).forEach(n=>nodes.forEach(m=>{if(m.type==='category'&&m.category===n.category)m.categoryHit=true}));nodes.filter(n=>n.type==='category'&&n.hit).forEach(n=>n.categoryHit=true)}
 function hitNode(list){let best=null,bestScore=Infinity;for(const n of list){const size=scaledSize(n),dx=Math.abs(pointer.x-n.px),dy=Math.abs(pointer.y-n.py);let inside=false,score=Infinity;if(n.type==='category'){const r=size.w/2;const d=Math.hypot(pointer.x-n.px,pointer.y-n.py);inside=d<=r;score=d/r}else{inside=dx<=size.w/2&&dy<=size.h/2;score=Math.max(dx/(size.w/2),dy/(size.h/2))}if(inside&&score<bestScore){best=n;bestScore=score}}return best}
 function updateCenter(distance=Infinity){const locked=!!activeCategory;centerMark.classList.toggle('locked',locked);centerMark.classList.toggle('nudge',lockedAttempt);centerMark.classList.toggle('reset-ready',locked&&distance<110*layout.scale);centerTitle.textContent=locked?'Return to center':'Choose a domain';centerHint.textContent=locked?'to switch domains':'hover a domain'}
 function determineFocus(){
@@ -317,7 +388,6 @@ function determineFocus(){
 function showIntro(){panel.innerHTML='<div class="eyebrow">Professional capabilities</div><h1>Eight-domain capability map</h1><p>Explore eight areas of expertise spanning development, design, educational technology, research, creative production, and project delivery.</p><div class="chips"><span class="chip">8 domains</span><span class="chip">Primary skills</span><span class="chip">Supporting capabilities</span></div><div class="intro">Hover a domain to reveal its skills. Hover a skill to explore its related capabilities. Return through the center before switching domains.</div>'}
 function setPanel(){let key='intro';if(activeNode?.type==='mini')key='m:'+activeNode.mini;else if(activeNode?.type==='skill')key='s:'+activeNode.category+'/'+activeNode.skill;else if(activeNode?.type==='category')key='c:'+activeNode.category;if(key===lastPanel)return;lastPanel=key;if(activeNode?.type==='mini'){const n=activeNode;panel.innerHTML=`<div class="eyebrow">Supporting capability</div><div class="path">${esc(n.category)} / ${esc(n.skill)}</div><h1>${esc(n.mini)}</h1><p>This capability supports ${esc(n.skill)} within ${esc(n.category)}.</p><div class="chips"><span class="chip">Supporting capability</span><span class="chip">Exploring this domain</span></div>`}else if(activeNode?.type==='skill'){const n=activeNode;panel.innerHTML=`<div class="eyebrow">Primary skill</div><div class="path">${esc(n.category)} / ${esc(n.skill)}</div><h1>${esc(n.skill)}</h1><p>Explore the related capabilities connected to this skill.</p><div class="chips"><span class="chip">${n.minis.length} capabilities</span><span class="chip">Exploring this domain</span></div><h2>Supporting capabilities</h2><div class="mini-list">${n.minis.map(x=>`<div class="mini-row">${esc(x)}</div>`).join('')}</div>`}else if(activeNode?.type==='category'){const n=activeNode,skills=Object.keys(SOURCE[n.category]),count=Object.values(SOURCE[n.category]).reduce((a,b)=>a+b.length,0);panel.innerHTML=`<div class="eyebrow">Capability domain</div><div class="path">Capability Map / ${esc(n.category)}</div><h1>${esc(n.category)}</h1><p>Explore the skills and related capabilities within this domain. Return to the center before switching to another domain.</p><div class="chips"><span class="chip">${skills.length} skills</span><span class="chip">${count} capabilities</span></div><h2>Primary skills</h2><div class="mini-list">${skills.map(x=>`<div class="mini-row">${esc(x)}</div>`).join('')}</div>`}else showIntro()}
 function applyClasses(){
-  const q=search.value.trim();
   const focusCat=activeCategory;
 
   nodes.forEach(n=>{
@@ -329,25 +399,16 @@ function applyClasses(){
       (n.type==='mini'&&miniVisible(n))
     );
 
-    let dim=q ? !(n.hit||n.categoryHit||n.skillHit) : false;
-    if(!q&&focusCat&&n.type==='category'&&n.category!==focusCat){
-      dim=true;
-    }
-
+    const dim=Boolean(focusCat&&n.type==='category'&&n.category!==focusCat);
     n.el.classList.toggle('dim',dim);
-    n.el.classList.toggle('match',Boolean(q)&&(n.hit||n.categoryHit||n.skillHit));
   });
 
   edges.forEach(e=>{
     let visible=e.kind==='core';
 
     if(e.kind!=='core'){
-      if(e.a.type==='category'&&e.b.type==='skill'){
-        visible=skillVisible(e.b);
-      }
-      if(e.a.type==='skill'&&e.b.type==='mini'){
-        visible=miniVisible(e.b);
-      }
+      if(e.a.type==='category'&&e.b.type==='skill') visible=skillVisible(e.b);
+      if(e.a.type==='skill'&&e.b.type==='mini') visible=miniVisible(e.b);
     }
 
     e.el.classList.toggle('hidden',!visible);
@@ -361,21 +422,13 @@ function applyClasses(){
     );
     e.el.classList.toggle('active',active);
 
-    let dim=Boolean(q)&&!(
-      e.a.hit||e.a.categoryHit||e.a.skillHit||
-      e.b.hit||e.b.categoryHit||e.b.skillHit
-    );
-
-    if(!q&&focusCat&&e.kind==='core'&&(
+    const dim=Boolean(focusCat&&e.kind==='core'&&(
       e.a.category===focusCat || e.b.category===focusCat
-    )){
-      dim=true;
-    }
-
+    ));
     e.el.classList.toggle('dim',dim);
   });
 }
 function render(initial=false){if(layoutDirty||initial){computeTargets();layoutDirty=false}for(const n of nodes){n.px=initial?n.tx:lerp(n.px,n.tx,.16);n.py=initial?n.ty:lerp(n.py,n.ty,.16);let s=n.type==='category'?.92:n.type==='skill'?.9:.92;if(n.type==='category'&&activeCategory&&n.category!==activeCategory)s-=.1;if(n===activeNode)s+=n.type==='category'?.24:n.type==='skill'?.09:.09;n.displayScale=s;n.el.style.left=n.px+'px';n.el.style.top=n.py+'px';n.el.style.setProperty('--s',s.toFixed(3));n.el.style.zIndex=n===activeNode?'1000':String(n.type==='category'?50:n.type==='skill'?30:20)}for(const e of edges){e.el.setAttribute('x1',e.a.px);e.el.setAttribute('y1',e.a.py);e.el.setAttribute('x2',e.b.px);e.el.setAttribute('y2',e.b.py)}applyClasses();lens.style.left=pointer.x+'px';lens.style.top=pointer.y+'px'}
-function tick(){determineFocus();render();requestAnimationFrame(tick)}
-search.addEventListener('input',()=>{updateSearch();layoutDirty=true;setPanel()});stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;pointer.inside=true});stage.addEventListener('pointerleave',()=>{pointer.inside=false;pointer.x=pointer.y=-9999});let timer=0;const schedule=()=>{clearTimeout(timer);timer=setTimeout(build,90)};window.addEventListener('resize',schedule);if('ResizeObserver'in window)new ResizeObserver(schedule).observe(stage);build();updateSearch();requestAnimationFrame(tick);
+function tick(){determineFocus();updateHoverAudio();render();requestAnimationFrame(tick)}
+stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();pointer.x=e.clientX-r.left;pointer.y=e.clientY-r.top;pointer.inside=true});stage.addEventListener('pointerleave',()=>{pointer.inside=false;pointer.x=pointer.y=-9999});let timer=0;const schedule=()=>{clearTimeout(timer);timer=setTimeout(build,90)};window.addEventListener('resize',schedule);if('ResizeObserver'in window)new ResizeObserver(schedule).observe(stage);build();requestAnimationFrame(tick);
 })();

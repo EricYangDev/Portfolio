@@ -117,3 +117,155 @@ svg{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:no
 }
 @media(prefers-reduced-motion:reduce){.mobile-domain{opacity:1;transform:none;transition:none}}
 
+
+
+/* View selector and revised start experience */
+.start-button{
+  min-width:min(680px,90vw);
+  min-height:150px;
+  padding:34px 72px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  line-height:1;
+}
+.start-button-label{
+  display:block;
+  font-size:clamp(20px,2vw,30px);
+  font-weight:900;
+  letter-spacing:.2em;
+}
+.start-button-note{
+  display:block;
+  color:rgba(221,243,249,.6);
+  font-size:clamp(11px,.9vw,14px);
+  font-weight:500;
+  letter-spacing:.08em;
+  text-transform:none;
+}
+.toolbar{position:relative}
+.view-toggle{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:25;
+  width:clamp(300px,27vw,410px);
+  height:42px;
+  transform:translate(-50%,-50%);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:4px;
+  border:1px solid rgba(111,234,255,.28);
+  border-radius:12px;
+  background:rgba(214,246,246,.88);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.42),0 6px 22px rgba(0,0,0,.28);
+  overflow:hidden;
+}
+.view-toggle-indicator{
+  position:absolute;
+  left:4px;
+  top:4px;
+  width:calc(50% - 4px);
+  height:calc(100% - 8px);
+  border:1px solid rgba(135,246,255,.68);
+  border-radius:9px;
+  background:linear-gradient(180deg,rgba(103,120,255,.98),rgba(76,87,220,.98));
+  box-shadow:0 2px 8px rgba(12,20,68,.34),inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .28s cubic-bezier(.22,.75,.22,1),background .25s ease;
+  pointer-events:none;
+}
+.view-toggle[data-mode="list"] .view-toggle-indicator{transform:translateX(100%)}
+.view-toggle-option{
+  position:relative;
+  z-index:1;
+  height:100%;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:#07111d;
+  font:inherit;
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.025em;
+  cursor:pointer;
+  transition:color .2s ease,text-shadow .2s ease;
+}
+.view-toggle-option.is-active{color:#f5feff;text-shadow:0 1px 5px rgba(0,0,0,.5)}
+.view-toggle-option:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+.desktop-list-view{
+  display:none;
+  min-height:0;
+  height:100%;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(35,66,110,.12),transparent 45%),
+    rgba(0,2,10,.58);
+}
+body.view-list .hover-view{display:none}
+body.view-list .desktop-list-view{display:block}
+.desktop-list-scroll{
+  height:100%;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:24px 28px 42px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(111,234,255,.28) rgba(255,255,255,.025);
+}
+.desktop-list-header{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:28px;
+  max-width:1400px;
+  margin:0 auto 22px;
+  padding:2px 2px 20px;
+  border-bottom:1px solid rgba(111,234,255,.12);
+}
+.desktop-list-header span{color:var(--cyan);font-size:9px;font-weight:800;letter-spacing:.23em;text-transform:uppercase}
+.desktop-list-header h2{margin:7px 0 0;font-size:27px;letter-spacing:-.025em}
+.desktop-list-header p{max-width:570px;margin:0;color:#8197aa;font-size:12px;line-height:1.55;text-align:right}
+.desktop-domain-list{
+  max-width:1400px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:start;
+  gap:18px;
+}
+.desktop-domain-list .mobile-domain{
+  opacity:1;
+  transform:none;
+  padding:21px 19px 20px;
+}
+.desktop-domain-list .mobile-skill-list{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:start;
+}
+.desktop-domain-list .mobile-skill{height:100%}
+.desktop-domain-list .mobile-domain-title h2{font-size:20px}
+.desktop-domain-list .mobile-capability-list li{font-size:11px}
+body.view-list .status i{background:#8c9cff;box-shadow:0 0 12px #8c9cff}
+
+@media(max-width:1180px) and (min-width:761px){
+  .view-toggle{width:300px}
+  .desktop-domain-list{grid-template-columns:1fr}
+  .desktop-domain-list .mobile-skill-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px) and (min-width:761px){
+  .view-toggle{width:270px}
+  .view-toggle-option{font-size:11px}
+  .brand{min-width:170px}
+}
+@media(max-width:760px){
+  .start-button{
+    min-width:min(560px,88vw);
+    min-height:126px;
+    padding:26px 28px;
+    gap:10px;
+  }
+  .start-button-label{font-size:clamp(17px,5vw,23px)}
+  .start-button-note{font-size:11px}
+}

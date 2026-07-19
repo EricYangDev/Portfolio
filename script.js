@@ -99,13 +99,14 @@ const SOURCE={
 "Soft Skills":{"Problem solving":["Quality assurance testing","Replicating bugs & errors","Solution prioritization"],"Creativity":["Interdisciplinary knowledge","Visual brainstorming"],"Communication":["Simplifying complex systems","Writing guides for others","Listening & remembering","Understanding constraints"],"Leadership":["Leading small projects","Owning prototypes","Coordinating design direction","Decision-making under uncertainty"]}
 };
 const colors=['#6d79ff','#43c7ff','#b37cff','#f08ec2','#e9b65b','#58d0a0','#6fd3e9','#8c9cff'];
-const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint'),backgroundMusic=document.getElementById('backgroundMusic'),hoverChime=document.getElementById('hoverChime'),startScreen=document.getElementById('startScreen'),startExploring=document.getElementById('startExploring'),mobileDomains=document.getElementById('mobileDomains');
+const stage=document.getElementById('stage'),nodesEl=document.getElementById('nodes'),linksEl=document.getElementById('links'),panel=document.getElementById('panel'),lens=document.getElementById('lens'),centerMark=document.getElementById('centerMark'),centerTitle=document.getElementById('centerTitle'),centerHint=document.getElementById('centerHint'),backgroundMusic=document.getElementById('backgroundMusic'),hoverChime=document.getElementById('hoverChime'),startScreen=document.getElementById('startScreen'),startExploring=document.getElementById('startExploring'),startButtonLabel=document.getElementById('startButtonLabel'),mobileDomains=document.getElementById('mobileDomains'),desktopListDomains=document.getElementById('desktopListDomains'),viewToggle=document.getElementById('viewToggle'),hoverModeButton=document.getElementById('hoverModeButton'),listModeButton=document.getElementById('listModeButton'),statusLabel=document.getElementById('statusLabel');
 const CATS=Object.keys(SOURCE),N=CATS.length;
 let nodes=[],edges=[],pointer={x:-9999,y:-9999,inside:false},layout={w:0,h:0,cx:0,cy:0,baseCx:0,baseCy:0,rx:0,ry:0,scale:1},activeCategory=null,activeSkill=null,activeMini=null,activeNode=null,lastPanel='',lockedAttempt=false,layoutDirty=true;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
 const mobileMedia=window.matchMedia('(max-width:760px)');
+let currentViewMode='hover';
 
 function buildMobilePortfolio(){
   if(!mobileDomains)return;
@@ -146,6 +147,55 @@ function buildMobilePortfolio(){
   },{rootMargin:'0px 0px -8% 0px',threshold:.08});
   cards.forEach(card=>observer.observe(card));
 }
+
+function buildDesktopPortfolio(){
+  if(!desktopListDomains)return;
+  desktopListDomains.innerHTML=CATS.map((category,ci)=>{
+    const skills=Object.entries(SOURCE[category]);
+    const capabilityCount=skills.reduce((total,[,items])=>total+items.length,0);
+    const skillMarkup=skills.map(([skill,capabilities])=>`
+      <section class="mobile-skill">
+        <h3>${esc(skill)}</h3>
+        <ul class="mobile-capability-list">
+          ${capabilities.map(capability=>`<li>${esc(capability)}</li>`).join('')}
+        </ul>
+      </section>`).join('');
+    return `<article class="mobile-domain is-visible" style="--c:${colors[ci]}">
+      <header class="mobile-domain-header">
+        <div class="mobile-domain-number">${String(ci+1).padStart(2,'0')}</div>
+        <div class="mobile-domain-title">
+          <h2>${esc(category)}</h2>
+          <p>${skills.length} primary skills · ${capabilityCount} capabilities</p>
+        </div>
+      </header>
+      <div class="mobile-skill-list">${skillMarkup}</div>
+    </article>`;
+  }).join('');
+}
+
+function setViewMode(mode){
+  currentViewMode=mode==='list'?'list':'hover';
+  const list=currentViewMode==='list';
+  document.body.classList.toggle('view-list',list);
+  viewToggle?.setAttribute('data-mode',currentViewMode);
+  hoverModeButton?.classList.toggle('is-active',!list);
+  listModeButton?.classList.toggle('is-active',list);
+  hoverModeButton?.setAttribute('aria-pressed',String(!list));
+  listModeButton?.setAttribute('aria-pressed',String(list));
+  if(statusLabel)statusLabel.textContent=list?'LIST VIEW':'INTERACTIVE SKILL MAP';
+  pointer.inside=false;
+  pointer.x=pointer.y=-9999;
+  activeCategory=activeSkill=activeMini=activeNode=null;
+  lastHoverAudioKey='';
+  if(!list&&!mobileMedia.matches){
+    layoutDirty=true;
+    requestAnimationFrame(()=>build());
+  }
+}
+
+hoverModeButton?.addEventListener('click',()=>setViewMode('hover'));
+listModeButton?.addEventListener('click',()=>setViewMode('list'));
+
 let audioUnlocked=false,audioUnlocking=null,hoverFadeFrame=0,lastHoverAudioKey='',lastHoverAudioAt=0;
 const BG_VOLUME=.075;
 const CHIME_PEAK=.34;
@@ -223,7 +273,7 @@ if(backgroundMusic){
 
 startExploring?.addEventListener('click',async()=>{
   startExploring.disabled=true;
-  startExploring.textContent='Entering...';
+  if(startButtonLabel)startButtonLabel.textContent='Entering...';
   document.body.classList.add('started');
   await unlockAudio();
   window.setTimeout(()=>startScreen?.remove(),760);
@@ -570,6 +620,6 @@ function applyClasses(){
   });
 }
 function render(initial=false){if(layoutDirty||initial){computeTargets();layoutDirty=false}for(const n of nodes){n.px=initial?n.tx:lerp(n.px,n.tx,.16);n.py=initial?n.ty:lerp(n.py,n.ty,.16);let s=n.type==='category'?.92:n.type==='skill'?.9:.92;if(n.type==='category'&&activeCategory&&n.category!==activeCategory)s-=.1;if(n===activeNode)s+=n.type==='category'?.24:n.type==='skill'?.09:.09;n.displayScale=s;n.el.style.left=n.px+'px';n.el.style.top=n.py+'px';n.el.style.setProperty('--s',s.toFixed(3));n.el.style.zIndex=n===activeNode?'1000':String(n.type==='category'?50:n.type==='skill'?30:20)}for(const e of edges){e.el.setAttribute('x1',e.a.px);e.el.setAttribute('y1',e.a.py);e.el.setAttribute('x2',e.b.px);e.el.setAttribute('y2',e.b.py)}applyClasses();lens.style.left=pointer.x+'px';lens.style.top=pointer.y+'px'}
-function tick(){if(!mobileMedia.matches){determineFocus();updateHoverAudio();render()}requestAnimationFrame(tick)}
-stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();const sx=stage.clientWidth/Math.max(1,r.width),sy=stage.clientHeight/Math.max(1,r.height);pointer.x=(e.clientX-r.left)*sx;pointer.y=(e.clientY-r.top)*sy;pointer.inside=true});stage.addEventListener('pointerleave',()=>{pointer.inside=false;pointer.x=pointer.y=-9999});let timer=0;const schedule=()=>{clearTimeout(timer);timer=setTimeout(build,90)};window.addEventListener('resize',schedule);mobileMedia.addEventListener?.('change',schedule);if('ResizeObserver'in window)new ResizeObserver(schedule).observe(stage);buildMobilePortfolio();build();requestAnimationFrame(tick);
+function tick(){if(!mobileMedia.matches&&currentViewMode==='hover'){determineFocus();updateHoverAudio();render()}requestAnimationFrame(tick)}
+stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();const sx=stage.clientWidth/Math.max(1,r.width),sy=stage.clientHeight/Math.max(1,r.height);pointer.x=(e.clientX-r.left)*sx;pointer.y=(e.clientY-r.top)*sy;pointer.inside=true});stage.addEventListener('pointerleave',()=>{pointer.inside=false;pointer.x=pointer.y=-9999});let timer=0;const schedule=()=>{clearTimeout(timer);timer=setTimeout(()=>{if(!mobileMedia.matches&&currentViewMode==='hover')build()},90)};window.addEventListener('resize',schedule);mobileMedia.addEventListener?.('change',()=>{if(!mobileMedia.matches&&currentViewMode==='hover')schedule()});if('ResizeObserver'in window)new ResizeObserver(()=>{if(!mobileMedia.matches&&currentViewMode==='hover')schedule()}).observe(stage);buildMobilePortfolio();buildDesktopPortfolio();setViewMode('hover');build();requestAnimationFrame(tick);
 })();
